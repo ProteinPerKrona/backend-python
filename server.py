@@ -6,6 +6,7 @@ from fastapi import FastAPI
 from bson import ObjectId
 
 from models.product_model import Product
+from models.request_model import Request
 from schemas.product_schema import products_serializer
 from config.db import collection, test_db
 
@@ -27,5 +28,17 @@ def test_ppk():
 
 @app.get("/ppk_10")
 def ppk_10():
-    products = products_serializer(collection.find({'protein':{'$gt':5}}).limit(10).sort('ppk',pymongo.DESCENDING))
+    products = products_serializer(collection.find({'protein':{'$gt':15}}).limit(10).sort('ppk',pymongo.DESCENDING))
+    return products
+
+@app.post("/tryme")
+def ppk_10(request:Request):
+    query_obj = {}
+    
+    req_obj = request.model_dump()
+    for query_key in req_obj.keys():
+        # {'protein':{'$gt':15}}
+        query_obj[query_key] = {'$gt':req_obj[query_key]}
+
+    products = products_serializer(collection.find(query_obj).limit(10).sort('ppk',pymongo.DESCENDING))
     return products
