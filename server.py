@@ -16,10 +16,10 @@ from config.db import collection, test_db
 app = FastAPI()
 
 
-@app.get("/db_test")
+@app.get("/")
 def test_db():
-    products = products_serializer(collection.find().limit(1))
-    return products
+    resp = "Server running"
+    return resp
 
 @app.get("/ppk")
 def test_ppk():
