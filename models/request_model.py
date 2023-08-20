@@ -2,5 +2,5 @@
 from pydantic import BaseModel
 
 class Request(BaseModel):
-    ppk:float | None = None
-    protein:float | None = None
+    filter:dict | None=None
+    orderby:str | None=None

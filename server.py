@@ -16,29 +16,51 @@ from config.db import collection, test_db
 app = FastAPI()
 
 
-@app.get("/")
+@app.get("/test")
 def test_db():
     resp = "Server running"
     return resp
 
-@app.get("/ppk")
-def test_ppk():
-    products = products_serializer(collection.find().limit(10).sort('ppk',pymongo.DESCENDING))
+@app.get("/protein_percent")
+def protein_percente():
+    # Filters so that all results have protein over 10
+    query_obj = {
+        'nutritions.protein':{'$gt':10}
+    }
+    sortby = 'nutritions.protein'
+
+    products = products_serializer(collection.find(query_obj).limit(10).sort(sortby,pymongo.DESCENDING))
     return products
 
-@app.get("/ppk_10")
+
+@app.get("/ppk_10%")
 def ppk_10():
-    products = products_serializer(collection.find({'protein':{'$gt':15}}).limit(10).sort('ppk',pymongo.DESCENDING))
+    # Filters so that all results have protein over 10
+    query_obj = {
+        'nutritions.protein':{'$gt':10}
+    }
+    sortby = 'ppk'
+    products = products_serializer(collection.find(query_obj).limit(10).sort(sortby,pymongo.DESCENDING))
     return products
 
-@app.post("/tryme")
-def ppk_10(request:Request):
-    query_obj = {}
-    
-    req_obj = request.model_dump()
-    for query_key in req_obj.keys():
-        # {'protein':{'$gt':15}}
-        query_obj[query_key] = {'$gt':req_obj[query_key]}
 
-    products = products_serializer(collection.find(query_obj).limit(10).sort('ppk',pymongo.DESCENDING))
+@app.post("/custom_req")
+def custom_req(request:Request):
+
+    # Example request to filter for more than 10% protein and order by fat percentege
+    '''
+    {
+    "orderby": "nutritions.fett",
+    "filter": {
+            "nutritions.protein":{"$gt":10}
+        }
+    }
+    
+    '''
+    req = request.model_dump()
+
+    query_obj = req['filter']
+    orderby = req["orderby"]
+
+    products = products_serializer(collection.find(query_obj).limit(10).sort(orderby,pymongo.DESCENDING))
     return products
