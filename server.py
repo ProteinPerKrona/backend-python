@@ -9,12 +9,26 @@ from models.product_model import Product
 from models.request_model import Request
 from schemas.product_schema import products_serializer
 from config.db import collection, test_db
+from fastapi.middleware.cors import CORSMiddleware
 
 
 
 # uvicorn server:app --reload
 app = FastAPI()
 
+
+origins = [
+    "0.0.0.0"
+]
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins="*",
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/test")
 def test_db():
@@ -33,15 +47,23 @@ def protein_percente():
     return products
 
 
-@app.get("/ppk_10%")
-def ppk_10():
-    # Filters so that all results have protein over 10
+@app.get("/ppk/")
+def ppk(number:int=5,page:int=1):
     query_obj = {
-        'nutritions.protein':{'$gt':10}
     }
     sortby = 'ppk'
-    products = products_serializer(collection.find(query_obj).limit(10).sort(sortby,pymongo.DESCENDING))
-    return products
+    products = products_serializer(collection.find(query_obj).limit(page*number).sort(sortby,pymongo.DESCENDING))
+
+    return products[(page-1)*number:page*number]
+
+@app.get("/ppg/")
+def ppk(number:int=5,page:int=1):
+    query_obj = {
+    }
+    sortby = 'nutritions.protein'
+    products = products_serializer(collection.find(query_obj).limit(page*number).sort(sortby,pymongo.DESCENDING))
+
+    return products[(page-1)*number:page*number]
 
 
 @app.post("/custom_req")
