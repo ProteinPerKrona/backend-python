@@ -7,4 +7,4 @@ source venv/bin/activate
 python3 -m pip install -r requirements.txt
 
 # Start server
-uvicorn server:app --reload
+python3 main.py
