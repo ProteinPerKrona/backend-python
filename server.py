@@ -74,20 +74,24 @@ def ppk(page_length: int = 5, page_no: int = 1):
     right_products = products[(page_no-1)*page_length:page_length*page_no]
 
     # Returns products
-    return right_products
+    return {
+        "items": right_products,
+        "previous": page_no != 1,
+        "next": True  # TODO
+    }
 
 
-@app.post("/custom_req")
-def custom_req(request: Request):
+# @app.post("/custom_req")
+# def custom_req(request: Request):
 
-    # Request object
-    req = request.model_dump()
+#     # Request object
+#     req = request.model_dump()
 
-    # Get filter and order
-    filter = req['filter']
-    orderby = req["orderby"]
+#     # Get filter and order
+#     filter = req['filter']
+#     orderby = req["orderby"]
 
-    products = products_serializer(collection.find(
-        filter).limit(10).sort(orderby, pymongo.DESCENDING))
+#     products = products_serializer(collection.find(
+#         filter).limit(10).sort(orderby, pymongo.DESCENDING))
 
-    return products
+#     return products
