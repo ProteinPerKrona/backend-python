@@ -12,5 +12,11 @@ cd scraper
 chmod +x setup.sh
 ./setup.sh
 ```
-The server should if everything is working run on: ```127.0.0.0:8000```
-To debug go to ```127.0.0.0:8000/docs```
+The server should if everything is working run on: 
+```
+127.0.0.0:8000
+```
+To debug go to :
+```
+127.0.0.0:8000/docs
+```
