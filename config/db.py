@@ -1,10 +1,6 @@
 # Imports
 from pymongo import MongoClient
-
-# Constants
-CONNECTION_STRING = "mongodb://localhost:27017"
-DB_NAME = "Product_db"
-COLLECTION_NAME = "Product_info"
+from config import CONNECTION_STRING, DB_NAME, COLLECTION_NAME
 
 
 client = MongoClient(CONNECTION_STRING)

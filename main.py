@@ -1,8 +1,6 @@
 import uvicorn
 
-PORT = 8000
-HOST = "0.0.0.0"
-RELOAD = True
+from config import HOST, PORT, RELOAD
 
 if __name__ == '__main__':
     uvicorn.run("server:app", reload=RELOAD,

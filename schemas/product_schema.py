@@ -2,6 +2,7 @@ def product_serializer(product) -> dict:
     try:
         return {
             'product': str(product['product']),
+            'url': str(product['url']),
             'ppk': float(product['ppk']),
             'cpk': float(product['cpk']),
             'weight': int(product['weight']),
